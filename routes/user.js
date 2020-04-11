@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const User = require("../models/User");
-// const mongoose = require("mongoose");
 
 app.get("/", (req, res) => {
   User.find()
@@ -12,11 +11,12 @@ app.get("/", (req, res) => {
 });
 
 app.post("/add", (req, res) => {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-  const username = req.body.username;
-  const password = req.body.password;
+  const { firstName, lastName, email, username, password } = req.body
+  // const firstName = req.body.firstName;
+  // const lastName = req.body.lastName;
+  // const email = req.body.email;
+  // const username = req.body.username;
+  // const password = req.body.password;
 
   const newUser = new User({
     firstName,
@@ -40,5 +40,17 @@ app.post("/add", (req, res) => {
         });
     });
 });
-
+app.get("/login", (req, res) => {
+  // const { username, password } = req.body
+  console.log("req.body", req.body)
+  
+  // if ({ username: username} && {password: password }) {
+    User.find({})
+      .then((users) => res.status(200).json(users))
+      console.log("users", users)
+      .catch((err) => {
+        res.status(500).json({ message: "err" });
+      });
+  // }
+});
 module.exports = app;

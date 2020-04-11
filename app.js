@@ -18,15 +18,6 @@ mongoose
     }
   )
   .then((result) => {
-    // const user = new User({
-    //   firstName: "test1",
-    //   lastName: "test1",
-    //   email: "test1@test.com",
-    //   username: "test1",
-    //   password: "123456",
-    // });
-    // user.save();
-
     console.log("Connected to mongoDB");
   })
   .catch((err) => {
@@ -41,5 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/user", require("./routes/user"));
+
+
 
 module.exports = app;
