@@ -1,16 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-require('mongoose-type-email');
 
-const userSchema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: mongoose.SchemaTypes.Email, required: true },
-  username: { type: String, required: true },
-  password: { type: String, required: true },
-  // favourites: {
-    // items: [{ showId: {type: Schema.Types.ObjectId}, required: true}]
+const UserSchema = new Schema({
+  firstName: { type: String, default: "", required: true },
+  lastName: { type: String, default: "", required: true },
+  email: { type: String, default: "", required: true },
+  password: { type: String, default: "", required: true },
+
+  status: {
+    type: String,
+    default: "I am new!",
+  },
+  // favourites: [
+  // {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Post'
   // }
+  // ]
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", UserSchema);
