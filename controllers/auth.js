@@ -17,7 +17,7 @@ exports.signup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   bcrypt
-    .hash(password, 12)
+    .hash(password, 10)
     .then(hashedPw => {
       const user = new User({
         firstName: firstName,
@@ -28,7 +28,12 @@ exports.signup = (req, res, next) => {
       return user.save();
     })
     .then(result => {
-      res.status(201).json({ message: 'User created!', userId: result._id });
+      const user = {
+        firstName: result.firstName,
+        lastName: result.lastName
+      }
+
+      res.status(201).json({ message: 'User created!', userId: result._id, user:user });
     })
     .catch(err => {
       if (!err.statusCode) {
@@ -41,9 +46,7 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  // let loadedUser;
-  req.session.currentUser = user;
-
+  let loadedUser;
   User.findOne({ email: email })
     .then(user => {
       if (!user) {
@@ -51,7 +54,7 @@ exports.login = (req, res, next) => {
         error.statusCode = 401;
         throw error;
       }
-      // loadedUser = user;
+      loadedUser = user;
       return bcrypt.compare(password, user.password);
     })
     .then(isEqual => {
@@ -62,13 +65,17 @@ exports.login = (req, res, next) => {
       }
       const token = jwt.sign(
         {
-          email: user.email,
-          userId: user._id.toString()
+          email: loadedUser.email,
+          userId: loadedUser._id.toString()
         },
         'somesupersecretsecret',
         { expiresIn: '1h' }
       );
-      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+      const user = {
+        firstName: loadedUser.firstName,
+        lastName: loadedUser.lastName
+      }
+      res.status(200).json({ token: token, userId: loadedUser._id.toString(), user: user });
     })
     .catch(err => {
       if (!err.statusCode) {

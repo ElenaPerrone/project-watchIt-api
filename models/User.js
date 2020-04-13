@@ -9,7 +9,7 @@ const UserSchema = new Schema({
 
   status: {
     type: String,
-    default: "I am new!",
+    default: "New user!",
   },
   // favourites: [
   // {
