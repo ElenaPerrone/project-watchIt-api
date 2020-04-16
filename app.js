@@ -10,6 +10,8 @@ const MongoStore = require("connect-mongo")(session);
 
 const User = require("./models/User");
 const authRoutes = require("./routes/auth");
+const seriesRoutes = require("./routes/series");
+
 
 const app = express();
 
@@ -57,6 +59,8 @@ app.use((req, res, next) => {
 });
 
 app.use("/user", authRoutes);
+app.use("/series", seriesRoutes);
+
 
 app.use((error, req, res, next) => {
   console.log(error);
